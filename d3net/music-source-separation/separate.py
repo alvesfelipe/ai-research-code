@@ -26,6 +26,9 @@ def run_separation(args, fft_size=4096, hop_size=1024, n_channels=2, apply_mwf_f
     # Set NNabla extention
     ctx = get_extension_context(args.context)
     nn.set_default_context(ctx)
+    
+    if args.context == 'cudnn':
+        nn.set_default_context(get_extension_context(args.context, device_id=0))
 
     sources = ['vocals', 'bass', 'drums', 'other']
 
