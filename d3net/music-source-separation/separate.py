@@ -16,21 +16,19 @@ import os
 import argparse
 import yaml
 import numpy as np
-import nnabla as nn
 from util import model_separate, save_stft_wav, generate_data
 from filter import apply_mwf
-<<<<<<< HEAD
 from model import D3NetNNablaWrapper
 import nnabla as nn
-=======
-from model_wrapper import SourceSeparationModel
->>>>>>> set nnabla default context
 from nnabla.ext_utils import get_extension_context
 
 def run_separation(args, fft_size=4096, hop_size=1024, n_channels=2, apply_mwf_flag=True, ch_flip_average=False):
     # Set NNabla extention
     ctx = get_extension_context(args.context)
     nn.set_default_context(ctx)
+    
+    if args.context == 'cudnn':
+        nn.set_default_context(get_extension_context(args.context, device_id=0))
 
     sources = ['vocals', 'bass', 'drums', 'other']
 
